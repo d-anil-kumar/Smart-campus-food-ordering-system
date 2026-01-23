@@ -23,3 +23,13 @@ class MenuItemSerializer(serializers.ModelSerializer):
             "is_available",
             "image",
         ]
+
+class CreateStallSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Stall
+        fields = [
+            "name",
+            "description",
+            "image",
+        ]
+

@@ -49,3 +49,34 @@ class OrderSerializer(serializers.ModelSerializer):
             "created_at",
             "items",
         ]
+
+
+
+class VendorOrderItemSerializer(serializers.ModelSerializer):
+    menu_item_name = serializers.CharField(source="menu_item.name", read_only=True)
+
+    class Meta:
+        model = OrderItem
+        fields = [
+            "menu_item_name",
+            "quantity",
+            "price_at_order_time",
+        ]
+
+
+class VendorOrderSerializer(serializers.ModelSerializer):
+    items = VendorOrderItemSerializer(many=True, read_only=True)
+    stall_name = serializers.CharField(source="stall.name", read_only=True)
+    student_username = serializers.CharField(source="student.username", read_only=True)
+
+    class Meta:
+        model = Order
+        fields = [
+            "id",
+            "student_username",
+            "stall_name",
+            "status",
+            "created_at",
+            "items",
+        ]
+

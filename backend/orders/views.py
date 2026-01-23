@@ -3,9 +3,9 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from rest_framework import status
-from users.permissions import IsStudent
+from users.permissions import IsStudent, IsVendor
 from .models import Order, OrderItem
-from .serializers import OrderCreateSerializer,OrderSerializer
+from .serializers import OrderCreateSerializer,OrderSerializer, VendorOrderSerializer
 from stalls.models import Stall, MenuItem
 
 
@@ -68,3 +68,53 @@ class MyOrdersView(APIView):
         orders = Order.objects.filter(student=request.user).order_by("created_at")
         serializer = OrderSerializer(orders, many = True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+
+class VendorOrdersView(APIView):
+    permission_classes = [IsAuthenticated, IsVendor]
+
+    def get(self, request):
+        try:
+            stall = request.user.stall
+        except Stall.DoesNotExist:
+            return Response(
+                {"detail": "Stall not found for this vendor"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        orders = (
+            Order.objects.filter(stall=stall)
+            .prefetch_related("items", "items__menu_item")
+            .order_by("-created_at")
+        )
+
+        serializer = VendorOrderSerializer(orders, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+class UpdateOrderStatusView(APIView):
+    permission_classes = [IsAuthenticated, IsVendor]
+
+    def patch(self, request, order_id):
+        try:
+            stall = request.user.stall
+        except Stall.DoesNotExist:
+            return Response({"detail": "Stall not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            order = Order.objects.get(id=order_id, stall=stall)
+        except Order.DoesNotExist:
+            return Response({"detail": "Order not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        new_status = request.data.get("status")
+        if new_status not in dict(Order.STATUS_CHOICES):
+            return Response(
+                {"detail": "Invalid status"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        order.status = new_status
+        order.save()
+
+        return Response(VendorOrderSerializer(order).data, status=status.HTTP_200_OK)
