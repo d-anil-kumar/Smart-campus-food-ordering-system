@@ -1,9 +1,15 @@
-function App() {
-  return (
-    <div className="text-center text-2xl font-bold mt-10">
-      Smart Campus Food Ordering
-    </div>
-  )
-}
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
-export default App
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<h1>Home Page ✅</h1>} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
