@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import StudentRoute from "./Authentication/StudentRoute"
+import Stalls from "./pages/Stalls";
 
 export default function App() {
   return (
@@ -9,6 +11,7 @@ export default function App() {
         <Route path="/" element={<h1>Home Page ✅</h1>} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/student/stalls" element={<StudentRoute><Stalls /></StudentRoute>} />
       </Routes>
     </BrowserRouter>
   );
