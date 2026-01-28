@@ -5,6 +5,7 @@ import StudentRoute from "./Authentication/StudentRoute"
 import Stalls from "./pages/Stalls";
 import Menu from "./pages/Menu";
 import Cart from "./pages/Cart";
+import Orders from "./pages/Orders";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/student/stalls" element={<StudentRoute><Stalls /></StudentRoute>} />
         <Route path="/student/stalls/:stall_id/menu" element={<StudentRoute><Menu /></StudentRoute>} />
         <Route path="/student/cart" element={<StudentRoute><Cart /></StudentRoute>} />
+        <Route path="/student/orders" element= {<StudentRoute><Orders /></StudentRoute>} />
       </Routes>
     </BrowserRouter>
   );
