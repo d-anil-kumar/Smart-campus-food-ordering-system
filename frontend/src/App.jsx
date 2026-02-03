@@ -6,6 +6,8 @@ import Stalls from "./pages/Stalls";
 import Menu from "./pages/Menu";
 import Cart from "./pages/Cart";
 import Orders from "./pages/Orders";
+import VendorDashboard from "./pages/VendorDashboard";
+import VendorRoute from "./Authentication/VendorRoute";
 
 export default function App() {
   return (
@@ -18,6 +20,7 @@ export default function App() {
         <Route path="/student/stalls/:stall_id/menu" element={<StudentRoute><Menu /></StudentRoute>} />
         <Route path="/student/cart" element={<StudentRoute><Cart /></StudentRoute>} />
         <Route path="/student/orders" element= {<StudentRoute><Orders /></StudentRoute>} />
+        <Route path="/vendor/dashboard" element= {<VendorRoute><VendorDashboard /></VendorRoute>} />
       </Routes>
     </BrowserRouter>
   );
